@@ -75,6 +75,21 @@
     #];
   };
 
+  security.sudo.extraRules = [
+  {
+    users = [ "siren" ];
+    commands = [
+      {
+        command = "${pkgs.light}/bin/light -U 5";
+        options = [ "NOPASSWD" ];
+      }
+      {
+        command = "${pkgs.light}/bin/light -A 5";
+        options = [ "NOPASSWD" ];
+      }
+    ];
+  }];
+
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
@@ -84,6 +99,7 @@
     wayland
     xdg-utils
     htop
+    light
   ];
 
   environment.pathsToLink = [ "/share/zsh" ];
@@ -93,6 +109,17 @@
     XDG_DATA_HOME   = "$HOME/.local/share";
     XDG_STATE_HOME  = "$HOME/.local/state";
   };
+
+security.rtkit.enable = true;
+services.pipewire = {
+  enable = true;
+  #alsa.enable = true;
+  #alsa.support32Bit = true;
+  pulse.enable = true;
+  # If you want to use JACK applications, uncomment this
+  #jack.enable = true;
+  wireplumber.enable = true;
+};
 
 
 #  programs.hyprland = {

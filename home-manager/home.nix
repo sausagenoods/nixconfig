@@ -6,6 +6,7 @@
   home.stateVersion = "22.11";
 
   programs.home-manager.enable = true;
+  fonts.fontconfig.enable = true;
   home.packages = with pkgs; [
     jq
     firefox
@@ -15,6 +16,11 @@
     grim
     slurp
     keepassxc
+    nerdfonts
+    font-awesome
+    pavucontrol
+    pulseaudio
+    git
   ];
 
   programs.foot = {
@@ -45,4 +51,5 @@
     enableSyntaxHighlighting = true;
   };
   #programs.xdg.enable = true;
+
 }
