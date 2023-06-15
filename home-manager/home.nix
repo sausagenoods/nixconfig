@@ -21,6 +21,12 @@
     pavucontrol
     pulseaudio
     git
+    swaybg
+    chromium
+    waybar
+    monero-gui
+    thunderbird
+    transmission
   ];
 
   programs.foot = {

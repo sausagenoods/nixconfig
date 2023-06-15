@@ -41,8 +41,10 @@
   # Enable the X11 windowing system.
   # services.xserver.enable = true;
 
-
-  
+  # HIP GPU acceleration
+  systemd.tmpfiles.rules = [
+    "L+    /opt/rocm/hip   -    -    -     -    ${pkgs.hip}"
+  ]; 
 
   # Configure keymap in X11
   # services.xserver.layout = "us";
@@ -66,7 +68,7 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.siren = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "video" "networkmanager" "audio" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "video" "networkmanager" "audio" "dialout" ]; # Enable ‘sudo’ for the user.
     shell = pkgs.zsh;
     #packages = with pkgs; [
     #   firefox
@@ -100,6 +102,7 @@
     xdg-utils
     htop
     light
+    clinfo
   ];
 
   environment.pathsToLink = [ "/share/zsh" ];
@@ -146,7 +149,7 @@ services.pipewire = {
   # services.openssh.enable = true;
 
   # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
+  networking.firewall.allowedTCPPorts = [ 8000 ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
@@ -162,7 +165,7 @@ services.pipewire = {
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "22.11"; # Did you read the comment?
+  system.stateVersion = "23.05"; # Did you read the comment?
 
 }
 
