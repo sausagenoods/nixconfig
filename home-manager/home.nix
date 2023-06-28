@@ -27,6 +27,7 @@
     monero-gui
     thunderbird
     transmission
+    imv
   ];
 
   programs.foot = {
@@ -43,10 +44,6 @@
       mouse = {
         hide-when-typing = "yes";
       };
-
-      #csd = {
-      #   border-width = 20;
-      #};
     };
   };
 
@@ -56,6 +53,4 @@
     enableCompletion = true;
     enableSyntaxHighlighting = true;
   };
-  #programs.xdg.enable = true;
-
 }
