@@ -13,6 +13,10 @@
 
   boot.initrd.luks.devices.crypted.device = "/dev/nvme0n1p1";
 
+  boot.extraModprobeConfig = ''
+    options thinkpad_acpi fan_control=1
+  '';
+
   networking.hostName = "eek14";
   networking.networkmanager.enable = true;
 
