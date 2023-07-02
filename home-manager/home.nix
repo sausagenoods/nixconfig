@@ -53,4 +53,12 @@
     enableCompletion = true;
     enableSyntaxHighlighting = true;
   };
+
+  home.pointerCursor = {
+    name = "Adwaita";
+    package = pkgs.gnome.adwaita-icon-theme;
+    size = 15;
+    x11.enable = true;
+    gtk.enable = true;
+  };
 }
