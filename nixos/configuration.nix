@@ -22,16 +22,12 @@
 
   time.timeZone = "Europe/Vilnius";
 
-  # HIP GPU acceleration
-  systemd.tmpfiles.rules = [
-    "L+    /opt/rocm/hip   -    -    -     -    ${pkgs.hip}"
-  ]; 
-
   programs.zsh.enable = true;
+  programs.sway.enable = true;
 
   users.users.siren = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "video" "networkmanager" "audio" "dialout" "docker" "vboxusers" ];
+    extraGroups = [ "wheel" "video" "networkmanager" "audio" "dialout" "docker" "vboxusers" "adbusers" ];
     shell = pkgs.zsh;
   };
 
@@ -59,9 +55,32 @@
     wayland
     xdg-utils
     htop
-    light
+    brightnessctl
     clinfo
     mpv
+    git
+    foot
+    zsh
+    zsh-completions
+    zsh-powerlevel10k
+    zsh-autosuggestions
+
+    jq
+    firefox
+    wofi
+    hyprpaper
+    grim
+    slurp
+    keepassxc
+    font-awesome
+    pavucontrol
+    pulseaudio
+    element-desktop-wayland
+    swaybg
+    chromium
+    waybar
+    monero-cli
+    thunderbird
   ];
 
   environment.pathsToLink = [ "/share/zsh" ];
@@ -92,7 +111,16 @@
   };
   systemd.sleep.extraConfig = "HibernateDelaySec=3m";
 
-  networking.firewall.allowedTCPPorts = [ 8000 5000 ];
+  networking.firewall.allowedTCPPorts = [ 8000 5000 8081 ];
+
+  programs.gnupg.agent = {
+    enable = true;
+    enableSSHSupport = true;
+  };
+  services.pcscd.enable = true;
+
+  services.tor.enable = true;
+  services.tor.client.enable = true;
 
   system.stateVersion = "23.05";
 }
