@@ -3,7 +3,7 @@
 {
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   imports =
-    [ # Include the results of the hardware scan.
+    [
       ./hardware-configuration.nix
     ];
 
@@ -27,24 +27,9 @@
 
   users.users.siren = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "video" "networkmanager" "audio" "dialout" "docker" "vboxusers" "adbusers" ];
+    extraGroups = [ "wheel" "video" "networkmanager" "audio" "dialout" "docker" "vboxusers" "adbusers" "wireshark" ];
     shell = pkgs.zsh;
   };
-
-  security.sudo.extraRules = [
-  {
-    users = [ "siren" ];
-    commands = [
-      {
-        command = "${pkgs.light}/bin/light -U 5";
-        options = [ "NOPASSWD" ];
-      }
-      {
-        command = "${pkgs.light}/bin/light -A 5";
-        options = [ "NOPASSWD" ];
-      }
-    ];
-  }];
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -59,12 +44,11 @@
     clinfo
     mpv
     git
-    foot
-    zsh
+    alacritty
     zsh-completions
     zsh-powerlevel10k
     zsh-autosuggestions
-
+    imv
     jq
     firefox
     wofi
@@ -72,7 +56,6 @@
     grim
     slurp
     keepassxc
-    font-awesome
     pavucontrol
     pulseaudio
     element-desktop-wayland
@@ -81,6 +64,30 @@
     waybar
     monero-cli
     thunderbird
+    obs-studio
+    monero-gui
+    networkmanagerapplet
+    dig
+    whois
+    libreoffice
+    file
+    unzip
+    wl-clipboard
+    transmission
+    gimp
+    ffmpeg
+    libwebp
+    pwgen
+    gnome.adwaita-icon-theme
+    tmux
+    filezilla
+    go
+  ];
+
+  fonts.packages = with pkgs; [
+    inter
+    font-awesome
+    terminus-nerdfont
   ];
 
   environment.pathsToLink = [ "/share/zsh" ];
@@ -111,7 +118,11 @@
   };
   systemd.sleep.extraConfig = "HibernateDelaySec=3m";
 
-  networking.firewall.allowedTCPPorts = [ 8000 5000 8081 ];
+  networking.firewall = {
+    checkReversePath = "loose";
+    allowedTCPPorts = [ 8000 5000 8081 5173];
+    allowedUDPPorts = [ 51820 37923 ];
+  };
 
   programs.gnupg.agent = {
     enable = true;
@@ -119,8 +130,16 @@
   };
   services.pcscd.enable = true;
 
-  services.tor.enable = true;
-  services.tor.client.enable = true;
+  programs.proxychains.enable = true;
+  programs.proxychains.proxies.prx1.enable = true;
+  programs.proxychains.proxies.prx1.type = "socks5";
+  programs.proxychains.proxies.prx1.host = "127.0.0.1";
+  programs.proxychains.proxies.prx1.port = 8887;
+
+  networking.extraHosts = "192.168.88.182 siren.lab";
+
+
+  programs.wireshark.enable = true;
 
   system.stateVersion = "23.05";
 }

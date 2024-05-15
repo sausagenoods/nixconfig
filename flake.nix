@@ -6,7 +6,7 @@
 
     hardware.url = "github:nixos/nixos-hardware";
 
-    hyprland.url = "github:hyprwm/Hyprland";
+    hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
   };
 
   outputs = { self, nixpkgs, hyprland, ... }@inputs: {
