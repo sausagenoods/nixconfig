@@ -46,7 +46,6 @@
     git
     alacritty
     zsh-completions
-    zsh-powerlevel10k
     zsh-autosuggestions
     imv
     jq
@@ -82,6 +81,11 @@
     tmux
     filezilla
     go
+    gcc
+    dunst
+    vscodium
+    krita
+    v2raya
   ];
 
   fonts.packages = with pkgs; [
@@ -92,10 +96,10 @@
 
   environment.pathsToLink = [ "/share/zsh" ];
   environment.sessionVariables = rec {
-    XDG_CACHE_HOME  = "$HOME/.cache";
+    XDG_CACHE_HOME = "$HOME/.cache";
     XDG_CONFIG_HOME = "$HOME/.config";
-    XDG_DATA_HOME   = "$HOME/.local/share";
-    XDG_STATE_HOME  = "$HOME/.local/state";
+    XDG_DATA_HOME = "$HOME/.local/share";
+    XDG_STATE_HOME = "$HOME/.local/state";
   };
 
   security.rtkit.enable = true;
@@ -105,7 +109,16 @@
     wireplumber.enable = true;
   };
 
-  virtualisation.docker.enable = true;
+  services.blueman.enable = true;
+
+  services.pipewire.wireplumber.extraConfig.bluetoothEnhancements = {
+    "monitor.bluez.properties" = {
+      "bluez5.enable-sbc-xq" = true;
+      "bluez5.enable-msbc" = true;
+      "bluez5.enable-hw-volume" = true;
+      "bluez5.roles" = [ "hsp_hs" "hsp_ag" "hfp_hf" "hfp_ag" ];
+    };
+  };
 
   # Suspend-then-hibernate everywhere
   services.logind = {
@@ -119,8 +132,8 @@
   systemd.sleep.extraConfig = "HibernateDelaySec=3m";
 
   networking.firewall = {
-    checkReversePath = "loose";
-    allowedTCPPorts = [ 8000 5000 8081 5173];
+    checkReversePath = false;
+    allowedTCPPorts = [ 8000 5000 8081 5175 5173 3000 8384 ];
     allowedUDPPorts = [ 51820 37923 ];
   };
 
@@ -130,17 +143,10 @@
   };
   services.pcscd.enable = true;
 
-  programs.proxychains.enable = true;
-  programs.proxychains.proxies.prx1.enable = true;
-  programs.proxychains.proxies.prx1.type = "socks5";
-  programs.proxychains.proxies.prx1.host = "127.0.0.1";
-  programs.proxychains.proxies.prx1.port = 8887;
-
-  networking.extraHosts = "192.168.88.182 siren.lab";
-
+  hardware.bluetooth.enable = true;
+  hardware.bluetooth.powerOnBoot = true;
 
   programs.wireshark.enable = true;
 
   system.stateVersion = "23.05";
 }
-
