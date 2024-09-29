@@ -147,6 +147,7 @@
   hardware.bluetooth.powerOnBoot = true;
 
   programs.wireshark.enable = true;
+  virtualisation.docker.enable = true;
 
   system.stateVersion = "23.05";
 }
