@@ -34,17 +34,16 @@
   # still possible to use this option, but it's recommended to use it in conjunction
   # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
   networking.useDHCP = lib.mkDefault true;
+  networking.nameservers = ["1.1.1.1" "9.9.9.9" "8.8.8.8"];
+  networking.wireless.enable = false;
   # networking.interfaces.enp2s0.useDHCP = lib.mkDefault true;
   # networking.interfaces.wlp3s0.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
-  hardware.opengl.extraPackages = with pkgs; [
-    rocm-opencl-icd
-    rocm-opencl-runtime
+  hardware.graphics.extraPackages = with pkgs; [
+    rocmPackages.clr.icd
     amdvlk
   ];
-
-  hardware.opengl.driSupport = true;
 }

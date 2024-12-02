@@ -24,6 +24,8 @@
 
   programs.zsh.enable = true;
   programs.sway.enable = true;
+  programs.hyprland.enable = true;
+  #services.tailscale.enable = true;
 
   users.users.siren = {
     isNormalUser = true;
@@ -77,7 +79,7 @@
     ffmpeg
     libwebp
     pwgen
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     tmux
     filezilla
     go
@@ -85,7 +87,9 @@
     dunst
     vscodium
     krita
-    v2raya
+    ncdu
+    openvpn
+    nodejs
   ];
 
   fonts.packages = with pkgs; [
@@ -109,27 +113,19 @@
     wireplumber.enable = true;
   };
 
-  services.blueman.enable = true;
-
-  services.pipewire.wireplumber.extraConfig.bluetoothEnhancements = {
-    "monitor.bluez.properties" = {
-      "bluez5.enable-sbc-xq" = true;
-      "bluez5.enable-msbc" = true;
-      "bluez5.enable-hw-volume" = true;
-      "bluez5.roles" = [ "hsp_hs" "hsp_ag" "hfp_hf" "hfp_ag" ];
-    };
-  };
-
   # Suspend-then-hibernate everywhere
   services.logind = {
     lidSwitch = "suspend-then-hibernate";
     extraConfig = ''
       HandlePowerKey=suspend-then-hibernate
       IdleAction=suspend-then-hibernate
-      IdleActionSec=2m
+      IdleActionSec=15min
     '';
   };
-  systemd.sleep.extraConfig = "HibernateDelaySec=3m";
+  systemd.sleep.extraConfig = "HibernateDelaySec=10min";
+  systemd.tmpfiles.rules = [
+    "L+    /opt/rocm/hip   -    -    -     -    ${pkgs.rocmPackages.clr}"
+  ];
 
   networking.firewall = {
     checkReversePath = false;
@@ -143,8 +139,9 @@
   };
   services.pcscd.enable = true;
 
-  hardware.bluetooth.enable = true;
-  hardware.bluetooth.powerOnBoot = true;
+  hardware.bluetooth = {
+    enable = true;
+  };
 
   programs.wireshark.enable = true;
   virtualisation.docker.enable = true;
