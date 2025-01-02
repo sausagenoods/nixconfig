@@ -25,7 +25,7 @@
   programs.zsh.enable = true;
   programs.sway.enable = true;
   programs.hyprland.enable = true;
-  #services.tailscale.enable = true;
+  services.tailscale.enable = true;
 
   users.users.siren = {
     isNormalUser = true;
@@ -59,7 +59,7 @@
     keepassxc
     pavucontrol
     pulseaudio
-    element-desktop-wayland
+    element-desktop
     swaybg
     chromium
     waybar
@@ -74,7 +74,7 @@
     file
     unzip
     wl-clipboard
-    transmission
+    transmission_4
     gimp
     ffmpeg
     libwebp
@@ -104,6 +104,7 @@
     XDG_CONFIG_HOME = "$HOME/.config";
     XDG_DATA_HOME = "$HOME/.local/share";
     XDG_STATE_HOME = "$HOME/.local/state";
+    NIXOS_OZONE_WL = 1;
   };
 
   security.rtkit.enable = true;
@@ -113,16 +114,12 @@
     wireplumber.enable = true;
   };
 
-  # Suspend-then-hibernate everywhere
-  services.logind = {
-    lidSwitch = "suspend-then-hibernate";
-    extraConfig = ''
-      HandlePowerKey=suspend-then-hibernate
-      IdleAction=suspend-then-hibernate
-      IdleActionSec=15min
+  services.logind.lidSwitch = "suspend-then-hibernate";
+  systemd.sleep.extraConfig = "HibernateDelaySec=20m";
+  environment.etc."systemd/system-sleep/loginctl-unlock-sessions-post-hibernation".source =
+    pkgs.writeShellScript "loginctl-unlock-sessions-post-hibernation" ''
+      [ "$1$SYSTEMD_SLEEP_ACTION" == "posthibernate" ] && ${pkgs.systemd}/bin/loginctl unlock-sessions
     '';
-  };
-  systemd.sleep.extraConfig = "HibernateDelaySec=10min";
   systemd.tmpfiles.rules = [
     "L+    /opt/rocm/hip   -    -    -     -    ${pkgs.rocmPackages.clr}"
   ];
