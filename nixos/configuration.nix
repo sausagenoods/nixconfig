@@ -96,7 +96,6 @@
     ffmpeg
     libwebp
     pwgen
-    adwaita-icon-theme
     tmux
     filezilla
     go
@@ -113,6 +112,10 @@
 
   fonts.packages = with pkgs; [
     inter
+    fira-code
+    jetbrains-mono
+    nerd-fonts.jetbrains-mono
+    d2coding
     font-awesome
   ];
 
@@ -144,6 +147,10 @@
     enableSSHSupport = true;
   };
   services.pcscd.enable = true;
+
+  hardware.bluetooth.enable = true;
+  hardware.bluetooth.powerOnBoot = true;
+  services.blueman.enable = true;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
